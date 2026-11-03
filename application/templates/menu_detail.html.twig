@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>{{ menu.titre }} - Vite & Gourmand</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #fffaf3;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar, footer {
+            background-color: #6b2638;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+
+        h1, h2 {
+            color: #6b2638;
+            font-family: Georgia, serif;
+        }
+
+        .btn-gourmand {
+            background-color: #6b2638;
+            color: white;
+        }
+
+        .btn-gourmand:hover {
+            background-color: #501b29;
+            color: white;
+        }
+
+        .detail-card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        footer {
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand"
+           href="{{ path('app_accueil') }}">
+            Vite & Gourmand
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navigation"
+                aria-controls="navigation"
+                aria-expanded="false"
+                aria-label="Afficher la navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ path('app_accueil') }}">
+                        Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ path('app_menus') }}">
+                        Nos menus
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+
+    <a href="{{ path('app_menus') }}"
+       class="btn btn-outline-secondary mb-4">
+        ← Retour aux menus
+    </a>
+
+    <div class="card detail-card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+            <h1 class="mb-3">{{ menu.titre }}</h1>
+
+            <p class="lead">{{ menu.description }}</p>
+
+            <div class="row g-3 my-4">
+                <div class="col-md-6">
+                    <strong>Thème :</strong> {{ menu.theme }}
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Régime :</strong> {{ menu.regime }}
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Nombre minimum :</strong>
+                    {{ menu.personnes }} personnes
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Prix minimum :</strong>
+                    {{ menu.prix }} €
+                </div>
+            </div>
+
+            <hr>
+
+            <h2 class="h4 mb-3">Composition du menu</h2>
+
+            <ul class="list-group mb-4">
+                <li class="list-group-item">
+                    <strong>Entrée :</strong> {{ menu.entree }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Plat :</strong> {{ menu.plat }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Dessert :</strong> {{ menu.dessert }}
+                </li>
+            </ul>
+
+            <h2 class="h4">Allergènes</h2>
+            <p>{{ menu.allergenes }}</p>
+
+            <h2 class="h4">Conditions de commande</h2>
+            <p>{{ menu.conditions }}</p>
+
+            <div class="alert alert-light border mt-4">
+                Ce menu utilise des données fictives de démonstration.
+                Les ingrédients et allergènes devront être confirmés.
+            </div>
+
+    
+<a href="{{ path('app_commander', {'id': app.request.attributes.get('id')}) }}"
+   class="btn btn-gourmand mt-2">
+    Commander ce menu
+</a>
+
+
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <p class="mb-0">
+        © 2026 Vite & Gourmand — Projet ECF DWWM
+    </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

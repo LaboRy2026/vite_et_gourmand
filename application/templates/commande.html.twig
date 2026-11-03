@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Commander - Vite & Gourmand</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #fffaf3; font-family: Arial, sans-serif; }
+        .navbar { background: #6b2638; }
+        .navbar-brand, .nav-link { color: white !important; }
+        h1 { color: #6b2638; font-family: Georgia, serif; }
+        .btn-gourmand { background: #6b2638; color: white; }
+        .btn-gourmand:hover { background: #501b29; color: white; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_accueil') }}">Vite & Gourmand</a>
+        <a class="nav-link" href="{{ path('app_menus') }}">Nos menus</a>
+    </div>
+</nav>
+
+<main class="container py-5" style="max-width: 750px;">
+    <a href="{{ path('app_menu_detail', {'id': id}) }}" class="btn btn-outline-secondary mb-4">
+        ← Retour au menu
+    </a>
+
+    <h1>Commander : {{ menu.titre }}</h1>
+    <p>Prix de base : <strong>{{ menu.prix }} €</strong> pour {{ menu.personnes }} personnes.</p>
+    <p class="text-muted">Simulation de commande pour le projet ECF.</p>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <form method="post" class="card shadow-sm p-4">
+        <input type="hidden" name="_token" value="{{ csrf_token('commander_' ~ id) }}">
+
+        <div class="mb-3">
+            <label for="nom" class="form-label">Nom et prénom</label>
+            <input type="text" id="nom" name="nom" class="form-control" required maxlength="150">
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Adresse e-mail</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="date_prestation" class="form-label">Date de l'événement</label>
+            <input type="date" id="date_prestation" name="date_prestation" class="form-control"
+                   min="{{ 'now'|date('Y-m-d') }}" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="personnes" class="form-label">Nombre de personnes</label>
+            <input type="number" id="personnes" name="personnes" class="form-control"
+                   min="{{ menu.personnes }}" value="{{ menu.personnes }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-gourmand">
+            Valider ma demande (simulation)
+        </button>
+    </form>
+</main>
+</body>
+</html>
