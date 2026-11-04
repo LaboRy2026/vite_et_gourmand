@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\DBAL\Connection;
 
 class MenuController extends AbstractController
 {
@@ -58,14 +59,30 @@ class MenuController extends AbstractController
     }
 
     #[Route('/menus/{id}', name: 'app_menu_detail', requirements: ['id' => '\d+'])]
-    public function detail(int $id): Response
-    {
-        if (!isset($this->menus[$id])) {
-            throw new NotFoundHttpException('Menu introuvable');
-        }
+    
+public function detail(int $id, Connection $connection): Response
+{
+    $menuSql = $connection->fetchAssociative(
+        'SELECT * FROM menu WHERE id_menu = ?',
+        [$id]
+    );
 
-        return $this->render('menu_detail.html.twig', [
-            'menu' => $this->menus[$id]
-        ]);
+    if (!$menuSql) {
+        throw $this->createNotFoundException('Menu introuvable');
     }
+
+    $menu = $this->menus[$id] ?? [];
+
+    $menu['titre'] = $menuSql['titre'];
+    $menu['description'] = $menuSql['description'];
+    $menu['theme'] = $menuSql['theme'];
+    $menu['regime'] = $menuSql['regime'];
+    $menu['prix'] = $menuSql['prix_minimum'];
+    $menu['personnes'] = $menuSql['nb_personnes_min'];
+    $menu['conditions'] = $menuSql['conditions'];
+
+    return $this->render('menu_detail.html.twig', [
+        'menu' => $menu
+    ]);
+}
 }

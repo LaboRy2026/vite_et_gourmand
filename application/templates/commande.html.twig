@@ -65,6 +65,53 @@
                    min="{{ menu.personnes }}" value="{{ menu.personnes }}" required>
         </div>
 
+<div class="mb-3">
+    <label for="date_livraison" class="form-label">
+        Date de livraison
+    </label>
+    <input type="date"
+           id="date_livraison"
+           name="date_livraison"
+           class="form-control"
+           min="{{ 'now'|date('Y-m-d') }}"
+           required>
+</div>
+
+<div class="mb-3">
+    <label for="heure_livraison" class="form-label">
+        Heure de livraison
+    </label>
+    <input type="time"
+           id="heure_livraison"
+           name="heure_livraison"
+           class="form-control"
+           required>
+</div>
+
+<div class="mb-3">
+    <label for="adresse_livraison" class="form-label">
+        Adresse de livraison
+    </label>
+    <input type="text"
+           id="adresse_livraison"
+           name="adresse_livraison"
+           class="form-control"
+           maxlength="255"
+           required>
+</div>
+
+<div class="mb-3">
+    <label for="ville_livraison" class="form-label">
+        Ville de livraison
+    </label>
+    <input type="text"
+           id="ville_livraison"
+           name="ville_livraison"
+           class="form-control"
+           maxlength="100"
+           required>
+</div>
+
         <button type="submit" class="btn btn-gourmand">
             Valider ma demande (simulation)
         </button>
