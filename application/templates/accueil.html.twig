@@ -170,11 +170,48 @@
         </p>
     </section>
 
-    <footer>
-        <p class="mb-0">
-            © 2026 Vite & Gourmand — Projet ECF DWWM
+<section class="container my-5" aria-labelledby="titre-avis">
+    <h2 id="titre-avis" class="text-center mb-4">
+        Avis de nos clients
+    </h2>
+
+    <p class="text-center text-muted">
+        Avis fictifs utilisés pour la démonstration du projet ECF.
+    </p>
+
+    {% if avis_valides is not empty %}
+        <div class="row g-4">
+            {% for avis in avis_valides %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <p class="mb-2" style="color:#b8860b;"
+                               aria-label="Note : {{ avis.note }} sur 5">
+                                {% for i in 1..5 %}
+                                    {{ i <= avis.note ? '★' : '☆' }}
+                                {% endfor %}
+                            </p>
+
+                            <p class="card-text">
+                                {{ avis.commentaire }}
+                            </p>
+
+                            <small class="text-muted">
+                                Publié le
+                                {{ avis.date_avis|date('d/m/Y') }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">
+            Aucun avis client validé pour le moment.
         </p>
-    </footer>
+    {% endif %}
+</section>
+{% include '_footer.html.twig' %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
