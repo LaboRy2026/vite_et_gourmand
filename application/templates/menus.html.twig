@@ -109,9 +109,59 @@
         et événements professionnels.
     </p>
 
+<section class="card shadow-sm p-4 mb-4" aria-labelledby="titre-filtres">
+    <h2 id="titre-filtres" class="h5 mb-3">Rechercher un menu</h2>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="filtre-prix" class="form-label">Prix maximum</label>
+            <input type="number" id="filtre-prix" class="form-control"
+                   min="0" placeholder="Ex. : 200">
+        </div>
+
+        <div class="col-md-3">
+            <label for="filtre-theme" class="form-label">Thème</label>
+            <select id="filtre-theme" class="form-select">
+                <option value="">Tous les thèmes</option>
+                <option value="Noël">Noël</option>
+                <option value="Mariage">Mariage</option>
+                <option value="Toutes occasions">Toutes occasions</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="filtre-regime" class="form-label">Régime alimentaire</label>
+            <select id="filtre-regime" class="form-select">
+                <option value="">Tous les régimes</option>
+                <option value="Classique">Classique</option>
+                <option value="Végétarien">Végétarien</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="filtre-personnes" class="form-label">Nombre de personnes</label>
+            <input type="number" id="filtre-personnes" class="form-control"
+                   min="1" placeholder="Ex. : 6">
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="button" id="reinitialiser-filtres"
+                class="btn btn-outline-secondary">
+            Réinitialiser les filtres
+        </button>
+    </div>
+</section>
+
+<p id="resultat-filtres" class="mb-3" role="status" aria-live="polite"></p>
     <div class="row g-4">
 
-        <div class="col-md-6 col-lg-4">
+        
+<div class="col-md-6 col-lg-4 menu-item"
+     data-prix="180"
+     data-theme="Noël"
+     data-regime="Classique"
+     data-personnes="6">
             <article class="card menu-card shadow-sm">
                 <div class="card-body p-4">
                     <h2 class="h4">Menu de Noël Tradition</h2>
@@ -142,7 +192,12 @@
             </article>
         </div>
 
-        <div class="col-md-6 col-lg-4">
+       
+<div class="col-md-6 col-lg-4 menu-item"
+     data-prix="600"
+     data-theme="Mariage"
+     data-regime="Classique"
+     data-personnes="20">
             <article class="card menu-card shadow-sm">
                 <div class="card-body p-4">
                     <h2 class="h4">Menu Mariage Élégance</h2>
@@ -174,7 +229,13 @@
             </article>
         </div>
 
-        <div class="col-md-6 col-lg-4">
+        
+
+<div class="col-md-6 col-lg-4 menu-item"
+     data-prix="150"
+     data-theme="Toutes occasions"
+     data-regime="Végétarien"
+     data-personnes="6">
             <article class="card menu-card shadow-sm">
                 <div class="card-body p-4">
                     <h2 class="h4">Menu Jardin Végétarien</h2>
@@ -219,5 +280,69 @@
 
 
 {% include '_footer.html.twig' %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const prix = document.getElementById('filtre-prix');
+    const theme = document.getElementById('filtre-theme');
+    const regime = document.getElementById('filtre-regime');
+    const personnes = document.getElementById('filtre-personnes');
+    const boutonReset = document.getElementById('reinitialiser-filtres');
+    const resultat = document.getElementById('resultat-filtres');
+    const menus = document.querySelectorAll('.menu-item');
+
+    function filtrerMenus() {
+        let nombreResultats = 0;
+
+        menus.forEach(function(menu) {
+            const prixMenu = Number(menu.dataset.prix);
+            const themeMenu = menu.dataset.theme;
+            const regimeMenu = menu.dataset.regime;
+            const minimumPersonnes = Number(menu.dataset.personnes);
+
+            const prixOK = prix.value === '' ||
+                prixMenu <= Number(prix.value);
+
+            const themeOK = theme.value === '' ||
+                themeMenu === theme.value;
+
+            const regimeOK = regime.value === '' ||
+                regimeMenu === regime.value;
+
+            const personnesOK = personnes.value === '' ||
+                minimumPersonnes <= Number(personnes.value);
+
+            const afficher = prixOK && themeOK &&
+                regimeOK && personnesOK;
+
+            menu.hidden = !afficher;
+            menu.style.display = afficher ? '' : 'none';
+
+            if (afficher) {
+                nombreResultats++;
+            }
+        });
+
+        resultat.textContent = nombreResultats === 0
+            ? 'Aucun menu ne correspond à votre recherche.'
+            : nombreResultats + ' menu(s) trouvé(s).';
+    }
+
+    [prix, theme, regime, personnes].forEach(function(champ) {
+        champ.addEventListener('input', filtrerMenus);
+        champ.addEventListener('change', filtrerMenus);
+    });
+
+    boutonReset.addEventListener('click', function() {
+        prix.value = '';
+        theme.value = '';
+        regime.value = '';
+        personnes.value = '';
+        filtrerMenus();
+    });
+
+    filtrerMenus();
+});
+</script>
 </body>
 </html>
