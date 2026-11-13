@@ -52,6 +52,10 @@ class CommandeController extends AbstractController
             $ville = trim($request->request->getString('ville_livraison'));
             $personnes = $request->request->getInt('personnes');
 
+                    $distanceSaisie = trim($request->request->getString('distance_livraison_km'));
+                    $distance = filter_var($distanceSaisie, FILTER_VALIDATE_FLOAT);
+                    $estBordeaux = mb_strtolower($ville) === 'bordeaux';
+
             $prestation = \DateTimeImmutable::createFromFormat(
                 '!Y-m-d',
                 $datePrestation
@@ -86,6 +90,13 @@ class CommandeController extends AbstractController
                 || $adresse === ''
                 || $ville === ''
                 || $personnes < $menu['personnes']
+
+                    || (!$estBordeaux && (
+                        $distanceSaisie === ''
+                        || $distance === false
+                        || $distance <= 0
+                        || $distance > 1000
+                    ))
             ) {
                 $this->addFlash(
                     'danger',
@@ -118,11 +129,36 @@ class CommandeController extends AbstractController
                         PASSWORD_DEFAULT
                     );
 
-                    // Calcul provisoire du prix selon les convives
-                    $prixTotal = round(
+                    
+                    // Calcul du prix selon le nombre de convives
+                    $prixMenu = round(
                         $menu['prix'] * $personnes / $menu['personnes'],
                         2
                     );
+
+                    // Réduction de 10 % si au moins 5 personnes
+                    // supplémentaires par rapport au minimum du menu
+                    $reduction = 0.0;
+
+                    if ($personnes >= $menu['personnes'] + 5) {
+                        $reduction = round($prixMenu * 0.10, 2);
+                    }
+            
+                    // Distance utilisée pour le calcul
+                    $distanceLivraison = $estBordeaux ? 0.0 : (float) $distance;
+
+                    // Livraison gratuite à Bordeaux
+                    // Hors Bordeaux : 5 € + 0,59 € par kilomètre
+                    $fraisLivraison = $estBordeaux
+                        ? 0.0
+                        : round(5 + 0.59 * $distanceLivraison, 2);
+
+                    // Montant total de la commande
+                    $prixTotal = round(
+                        $prixMenu - $reduction + $fraisLivraison,
+                        2
+                    );
+ 
 
                     // Enregistrer le client et sa commande ensemble
                     $connection->beginTransaction();
@@ -147,11 +183,14 @@ class CommandeController extends AbstractController
                             'date_livraison' => $dateLivraison,
                             'heure_livraison' => $heureLivraison,
                             'adresse_livraison' => $adresse,
-                            'ville_livraison' => $ville,
-                            'nombre_personnes' => $personnes,
-                            'prix_menu_commande' => $prixTotal,
-                            'prix_total' => $prixTotal,
-                            'statut' => 'en_attente'
+                            'ville_livraison' => $ville,               
+'nombre_personnes' => $personnes,
+'prix_menu_commande' => $prixMenu,
+'montant_reduction' => $reduction,
+'distance_livraison_km' => $distanceLivraison,
+'frais_livraison' => $fraisLivraison,
+'prix_total' => $prixTotal,
+'statut' => 'en_attente'
                         ]);
 
                         $idCommande = (int) $connection->lastInsertId();
