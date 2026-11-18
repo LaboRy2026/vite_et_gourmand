@@ -42,6 +42,12 @@ https://github.com/LaboRy2026/vite_et_gourmand
 - Consultation des commandes
 - Modification du statut d'une commande
 - Vérification des données avec des commandes SQL
+- Filtres dynamiques des menus sans rechargement de page.
+- Calcul automatique du prix selon le nombre de convives.
+- Réduction de 10 % lorsque le seuil prévu est atteint.
+- Calcul des frais de livraison hors Bordeaux.
+- Affichage des avis clients validés, lorsqu'ils existent.
+- Pages de mentions légales et de CGV.
 
 Les principales fonctionnalités ont été testées sur l'hébergement alwaysdata.
 
