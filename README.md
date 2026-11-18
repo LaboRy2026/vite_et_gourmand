@@ -93,6 +93,7 @@ Exemple :
 ```bash
 mariadb -u root -p vite_et_gourmand < vite_et_gourmand.sql
 ```
+mariadb -u root -p vite_et_gourmand < donnees_demo.sql
 
 Les données de démonstration doivent être présentes dans la base pour tester les fonctionnalités.
 
