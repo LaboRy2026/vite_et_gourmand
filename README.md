@@ -94,16 +94,18 @@ Créer une base MariaDB nommée `vite_et_gourmand`.
 
 Importer ensuite le script SQL fourni avec le projet depuis un outil tel que phpMyAdmin ou le client MariaDB.
 
+
 Exemple :
 
 ```bash
 mariadb -u root -p vite_et_gourmand < vite_et_gourmand.sql
-```bash
 mariadb -u root -p vite_et_gourmand < donnees_demo.sql
+```
 
 Les données de démonstration doivent être présentes dans la base pour tester les fonctionnalités.
 
 ### 4. Configurer les variables d'environnement
+  
 
 Créer un fichier `.env.local` dans le dossier `application/`.
 
