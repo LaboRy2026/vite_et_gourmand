@@ -185,7 +185,7 @@ Ces tests ont été réalisés sur le site déployé.
 
 Cette version constitue une réalisation partielle du cahier des charges initial.
 
-Les fonctionnalités avancées telles que l'espace client complet, les filtres dynamiques, les notifications automatiques par e-mail, la gestion des employés et les statistiques NoSQL intégrées ne sont pas encore opérationnelles.
+Les fonctionnalités avancées telles que l'espace client complet, les notifications automatiques par e-mail, la gestion des employés et les statistiques NoSQL intégrées ne sont pas encore opérationnelles.
 
 Le formulaire de commande est utilisé dans le cadre d'une démonstration pédagogique, sans paiement en ligne.
 
